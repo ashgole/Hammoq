@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hammoq Task Manager - Technical Assessment Implementation</title>
+  <style>
+    :root {
+      --bg-page: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-card-subtle: #f1f5f9;
+      --bg-code: #0f172a;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --text-code: #e2e8f0;
+      --border-color: #e2e8f0;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --primary-text: #ffffff;
+      --success: #16a34a;
+      --success-bg: #f0fdf4;
+      --success-border: #bbf7d0;
+      --success-text: #166534;
+      --warning: #d97706;
+      --warning-bg: #fffbeb;
+      --warning-border: #fde68a;
+      --warning-text: #92400e;
+      --danger: #dc2626;
+      --danger-bg: #fef2f2;
+      --danger-border: #fecaca;
+      --danger-text: #991b1b;
+      --info: #0284c7;
+      --info-bg: #f0f9ff;
+      --info-border: #bae6fd;
+      --info-text: #075985;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.08);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-pill: 9999px;
+      --transition: all 0.25s ease;
+    }
+
+    [data-theme="dark"] {
+      --bg-page: #0b0f19;
+      --bg-card: #131c2e;
+      --bg-card-subtle: #1e293b;
+      --bg-code: #060911;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --text-code: #93c5fd;
+      --border-color: #243048;
+      --primary: #3b82f6;
+      --primary-hover: #60a5fa;
+      --primary-light: #1e2b48;
+      --primary-text: #0b0f19;
+      --success: #22c55e;
+      --success-bg: rgba(22, 163, 74, 0.2);
+      --success-border: #16a34a;
+      --success-text: #86efac;
+      --warning: #f59e0b;
+      --warning-bg: rgba(217, 119, 6, 0.2);
+      --warning-border: #d97706;
+      --warning-text: #fde68a;
+      --danger: #ef4444;
+      --danger-bg: rgba(220, 38, 38, 0.2);
+      --danger-border: #dc2626;
+      --danger-text: #fca5a5;
+      --info: #38bdf8;
+      --info-bg: rgba(2, 132, 199, 0.2);
+      --info-border: #0284c7;
+      --info-text: #bae6fd;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      line-height: 1.6;
+      transition: background-color var(--transition), color var(--transition);
+      padding-bottom: 4rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: 800;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+    }
+
+    .title-group h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .title-group p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: var(--radius-pill);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-primary {
+      background-color: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+
+    .theme-toggle {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.6rem 1.1rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    /* Section Cards */
+    .section-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+    }
+
+    .section-card h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: var(--text-primary);
+    }
+
+    .section-card p {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    /* Stat Cards */
+    .stat-card {
+      background-color: var(--bg-card-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .stat-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 4px;
+    }
+
+    .stat-card.total::before { background-color: var(--primary); }
+    .stat-card.pending::before { background-color: var(--warning); }
+    .stat-card.in-progress::before { background-color: var(--info); }
+    .stat-card.completed::before { background-color: var(--success); }
+
+    .stat-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .stat-value {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .stat-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    /* UI Preview Box */
+    .preview-box {
+      background-color: var(--bg-page);
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .preview-toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 240px;
+      padding: 0.65rem 1rem;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+    }
+
+    .select-dropdown {
+      padding: 0.65rem 1rem;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    /* Tables */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.925rem;
+      background-color: var(--bg-card);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    .data-table th {
+      background-color: var(--bg-card-subtle);
+      color: var(--text-secondary);
+      font-weight: 700;
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    .data-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-primary);
+      vertical-align: middle;
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover {
+      background-color: var(--bg-card-subtle);
+    }
+
+    /* Pills */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .pill-pending { background-color: var(--warning-bg); color: var(--warning-text); border: 1px solid var(--warning-border); }
+    .pill-in-progress { background-color: var(--info-bg); color: var(--info-text); border: 1px solid var(--info-border); }
+    .pill-completed { background-color: var(--success-bg); color: var(--success-text); border: 1px solid var(--success-border); }
+
+    .pill-low { background-color: rgba(148, 163, 184, 0.2); color: var(--text-secondary); }
+    .pill-medium { background-color: var(--warning-bg); color: var(--warning-text); }
+    .pill-high { background-color: var(--danger-bg); color: var(--danger-text); }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.55rem 1.1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--primary-text);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-sm {
+      padding: 0.35rem 0.65rem;
+      font-size: 0.8rem;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border-color: var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--bg-card-subtle);
+    }
+
+    /* Code Blocks */
+    pre {
+      background-color: var(--bg-code);
+      color: var(--text-code);
+      padding: 1.25rem;
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      margin: 1rem 0;
+      border: 1px solid var(--border-color);
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background-color: var(--bg-card-subtle);
+      color: var(--primary);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    pre code {
+      background-color: transparent;
+      color: inherit;
+      padding: 0;
+    }
+
+    /* Verification Checklist */
+    .check-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      background-color: var(--bg-card-subtle);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+    }
+
+    .check-icon {
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .check-title {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .check-desc {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-top: 0.2rem;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="brand">
+        <div class="logo-icon">H</div>
+        <div class="title-group">
+          <h1>Hammoq Task Manager</h1>
+          <p>Full-Stack MERN Technical Assessment &bull; Implementation Showcase</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span class="badge badge-primary">Assessment Ready</span>
+        <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()">
+          <span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Project Overview -->
+    <section class="section-card">
+      <h2>📌 Project Overview & Technical Stack</h2>
+      <p>
+        This Task Manager application is built for the Hammoq Technical Assessment to demonstrate enterprise-grade
+        MERN stack engineering, clean architecture adhering to <strong>SOLID principles</strong>, strict 
+        <strong>Dark & Light theme support</strong> across every component, and live integration with MongoDB Atlas.
+      </p>
+      <div class="grid-2">
+        <div class="stat-card" style="border-left: 4px solid #2563eb;">
+          <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Frontend Stack</h3>
+          <ul style="padding-left: 1.2rem; color: var(--text-secondary); font-size: 0.9rem;">
+            <li><strong>React.js 18</strong> with Vite</li>
+            <li><strong>JavaScript (ES6+)</strong> &ndash; No TypeScript</li>
+            <li><strong>Modular CSS</strong> with CSS Design Tokens</li>
+            <li><strong>ThemeContext</strong> for dynamic Dark/Light switching</li>
+            <li><strong>Centralized API Service</strong> using native fetch</li>
+          </ul>
+        </div>
+        <div class="stat-card" style="border-left: 4px solid #16a34a;">
+          <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Backend Stack</h3>
+          <ul style="padding-left: 1.2rem; color: var(--text-secondary); font-size: 0.9rem;">
+            <li><strong>Node.js</strong> &amp; <strong>Express.js</strong></li>
+            <li><strong>MongoDB Atlas</strong> &amp; <strong>Mongoose ODM</strong></li>
+            <li>Target Database: <code>Hammoq</code></li>
+            <li>Target Collection: <code>tasks</code></li>
+            <li>Centralized Error Handling &amp; Validation</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture & SOLID Principles -->
+    <section class="section-card">
+      <h2>🏛️ Architectural Decisions &amp; SOLID Principles</h2>
+      <div class="grid-2">
+        <div>
+          <h3 style="font-size: 1.05rem; margin-bottom: 0.5rem; color: var(--primary);">User Rule 1: Comprehensive Dark &amp; Light Theme</h3>
+          <p style="font-size: 0.925rem;">
+            Implemented through semantic CSS variables defined at <code>:root</code> and <code>[data-theme='dark']</code>. 
+            All typography, card backgrounds, borders, inputs, modals, table rows, and badges dynamically transition without 
+            layout thrashing. The theme preference is automatically detected from the user's OS and persisted in <code>localStorage</code>.
+          </p>
+        </div>
+        <div>
+          <h3 style="font-size: 1.05rem; margin-bottom: 0.5rem; color: var(--primary);">User Rule 2: Strict SOLID Adherence</h3>
+          <p style="font-size: 0.925rem;">
+            <strong>Single Responsibility (SRP):</strong> Separate modules for DB connection, models, controllers, routes, error handling, API services, and UI components.<br />
+            <strong>Dependency Inversion (DIP):</strong> UI components depend on abstract API service contracts (<code>api.js</code>) rather than direct HTTP calls.<br />
+            <strong>Open/Closed (OCP):</strong> Easy extensibility for new endpoints or theme tokens without modifying core logic.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Visual Dashboard Preview -->
+    <section class="section-card">
+      <h2>💻 Visual Dashboard &amp; Feature Showcase</h2>
+      <p>
+        The responsive Dashboard layout includes live metric summary cards, search and multi-filtering, 
+        inline status cycling, creation/edit modals, and deletion confirmation safeguards.
+      </p>
+
+      <!-- Metric Cards Preview -->
+      <div class="grid-4">
+        <div class="stat-card total">
+          <span class="stat-label">Total Tasks</span>
+          <span class="stat-value">4</span>
+          <span class="stat-desc">All tracked work items</span>
+        </div>
+        <div class="stat-card pending">
+          <span class="stat-label">Pending</span>
+          <span class="stat-value">1</span>
+          <span class="stat-desc">Awaiting commencement</span>
+        </div>
+        <div class="stat-card in-progress">
+          <span class="stat-label">In Progress</span>
+          <span class="stat-value">1</span>
+          <span class="stat-desc">Active execution</span>
+        </div>
+        <div class="stat-card completed">
+          <span class="stat-label">Completed</span>
+          <span class="stat-value">2</span>
+          <span class="stat-desc">Finished deliverables</span>
+        </div>
+      </div>
+
+      <!-- Toolbar Preview -->
+      <div class="preview-box">
+        <div class="preview-toolbar">
+          <input type="text" class="search-input" placeholder="🔍 Search tasks by title..." value="Hammoq Task Manager" readonly />
+          <select class="select-dropdown">
+            <option>All Statuses</option>
+            <option>Pending</option>
+            <option selected>In Progress</option>
+            <option>Completed</option>
+          </select>
+          <select class="select-dropdown">
+            <option>All Priorities</option>
+            <option selected>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+          </select>
+          <button class="btn btn-primary">+ New Task</button>
+        </div>
+
+        <!-- Table Preview -->
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Task Details</th>
+              <th>Status</th>
+              <th>Priority</th>
+              <th>Due Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>Build Hammoq Task Manager</strong>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Full-stack MERN application for technical assessment</div>
+              </td>
+              <td><span class="pill pill-in-progress">In Progress</span></td>
+              <td><span class="pill pill-high">High</span></td>
+              <td>Nov 20, 2026</td>
+              <td>
+                <button class="btn btn-outline btn-sm">Edit</button>
+                <button class="btn btn-outline btn-sm" style="color: var(--danger);">Delete</button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Setup MongoDB Atlas Connection</strong>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Connect to Hammoq database and tasks collection</div>
+              </td>
+              <td><span class="pill pill-completed">Completed</span></td>
+              <td><span class="pill pill-high">High</span></td>
+              <td>Nov 13, 2026</td>
+              <td>
+                <button class="btn btn-outline btn-sm">Edit</button>
+                <button class="btn btn-outline btn-sm" style="color: var(--danger);">Delete</button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Implement Dark &amp; Light Theme</strong>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">CSS variables across all components with ThemeContext</div>
+              </td>
+              <td><span class="pill pill-completed">Completed</span></td>
+              <td><span class="pill pill-medium">Medium</span></td>
+              <td>Nov 13, 2026</td>
+              <td>
+                <button class="btn btn-outline btn-sm">Edit</button>
+                <button class="btn btn-outline btn-sm" style="color: var(--danger);">Delete</button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Record Assessment Video</strong>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Explain key decisions, omitted features, and limitations</div>
+              </td>
+              <td><span class="pill pill-pending">Pending</span></td>
+              <td><span class="pill pill-high">High</span></td>
+              <td>Nov 14, 2026</td>
+              <td>
+                <button class="btn btn-outline btn-sm">Edit</button>
+                <button class="btn btn-outline btn-sm" style="color: var(--danger);">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- REST API Specification -->
+    <section class="section-card">
+      <h2>🔌 Backend REST API Specification</h2>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Endpoint</th>
+            <th>Parameters / Body</th>
+            <th>Purpose &amp; Status Code</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong style="color: var(--primary);">GET</strong></td>
+            <td><code>/api/hello</code></td>
+            <td>None</td>
+            <td>API connectivity verification (200 OK)</td>
+          </tr>
+          <tr>
+            <td><strong style="color: var(--primary);">GET</strong></td>
+            <td><code>/api/tasks</code></td>
+            <td><code>search, status, priority, sortBy, sortOrder</code></td>
+            <td>Retrieve tasks list + real-time dashboard counts (200 OK)</td>
+          </tr>
+          <tr>
+            <td><strong style="color: var(--primary);">GET</strong></td>
+            <td><code>/api/tasks/:id</code></td>
+            <td><code>id</code> (MongoDB ObjectId)</td>
+            <td>Retrieve single task by ID (200 OK / 404 Not Found)</td>
+          </tr>
+          <tr>
+            <td><strong style="color: var(--success);">POST</strong></td>
+            <td><code>/api/tasks</code></td>
+            <td><code>{ title, description, status, priority, dueDate }</code></td>
+            <td>Create task with validation (201 Created / 400 Bad Request)</td>
+          </tr>
+          <tr>
+            <td><strong style="color: var(--warning);">PUT</strong></td>
+            <td><code>/api/tasks/:id</code></td>
+            <td>Updated fields</td>
+            <td>Update task by ID (200 OK / 400 / 404)</td>
+          </tr>
+          <tr>
+            <td><strong style="color: var(--danger);">DELETE</strong></td>
+            <td><code>/api/tasks/:id</code></td>
+            <td><code>id</code> (MongoDB ObjectId)</td>
+            <td>Remove task by ID (200 OK / 404 Not Found)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Verification Results -->
+    <section class="section-card">
+      <h2>✅ Verification &amp; Testing Report</h2>
+      <ul class="check-list">
+        <li class="check-item">
+          <span class="check-icon">🟢</span>
+          <div>
+            <div class="check-title">MongoDB Atlas Connection Verified</div>
+            <div class="check-desc">Successfully connected to database <code>Hammoq</code> and bound to collection <code>tasks</code>.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <span class="check-icon">🟢</span>
+          <div>
+            <div class="check-title">Live Endpoints &amp; CRUD Integration Verified</div>
+            <div class="check-desc">Executed automated integration tests (<code>test-api.js</code>) verifying GET, POST, PUT, DELETE, and 404/400 validation handlers.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <span class="check-icon">🟢</span>
+          <div>
+            <div class="check-title">Frontend Production Build Verified</div>
+            <div class="check-desc">Ran <code>npm run build</code> in <code>client/</code>: 43 modules transformed cleanly in 1.10s with 0 errors and 0 warnings.</div>
+          </div>
+        </li>
+        <li class="check-item">
+          <span class="check-icon">🟢</span>
+          <div>
+            <div class="check-title">Secret Management Safeguards Verified</div>
+            <div class="check-desc">Verified <code>.gitignore</code> rules preventing any <code>.env</code> exposure. Created sanitized <code>.env.example</code>.</div>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <footer>
+      <p>Hammoq Infosystems Pvt. Ltd. Technical Assessment &bull; Candidate Assessment Package &bull; 2026</p>
+    </footer>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', newTheme);
+      
+      const themeIcon = document.getElementById('themeIcon');
+      const themeLabel = document.getElementById('themeLabel');
+      if (newTheme === 'dark') {
+        themeIcon.textContent = '☀️';
+        themeLabel.textContent = 'Light Mode';
+      } else {
+        themeIcon.textContent = '🌙';
+        themeLabel.textContent = 'Dark Mode';
+      }
+    }
+  </script>
+</body>
+</html>

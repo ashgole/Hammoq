@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hammoq Task Manager - Visual Design Reference</title>
+  <style>
+    :root {
+      --bg-page: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-card-subtle: #f1f5f9;
+      --bg-modal-backdrop: rgba(15, 23, 42, 0.6);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-text: #ffffff;
+      --success: #16a34a;
+      --success-bg: #f0fdf4;
+      --success-border: #bbf7d0;
+      --success-text: #166534;
+      --warning: #d97706;
+      --warning-bg: #fffbeb;
+      --warning-border: #fde68a;
+      --warning-text: #92400e;
+      --danger: #dc2626;
+      --danger-bg: #fef2f2;
+      --danger-border: #fecaca;
+      --danger-text: #991b1b;
+      --info: #0284c7;
+      --info-bg: #f0f9ff;
+      --info-border: #bae6fd;
+      --info-text: #075985;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-pill: 9999px;
+      --transition: all 0.2s ease;
+    }
+
+    [data-theme="dark"] {
+      --bg-page: #0b0f19;
+      --bg-card: #131c2e;
+      --bg-card-subtle: #1e293b;
+      --bg-modal-backdrop: rgba(0, 0, 0, 0.75);
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-color: #243048;
+      --primary: #3b82f6;
+      --primary-hover: #60a5fa;
+      --primary-text: #0b0f19;
+      --success: #22c55e;
+      --success-bg: rgba(22, 163, 74, 0.2);
+      --success-border: #16a34a;
+      --success-text: #86efac;
+      --warning: #f59e0b;
+      --warning-bg: rgba(217, 119, 6, 0.2);
+      --warning-border: #d97706;
+      --warning-text: #fde68a;
+      --danger: #ef4444;
+      --danger-bg: rgba(220, 38, 38, 0.2);
+      --danger-border: #dc2626;
+      --danger-text: #fca5a5;
+      --info: #38bdf8;
+      --info-bg: rgba(2, 132, 199, 0.2);
+      --info-border: #0284c7;
+      --info-text: #bae6fd;
+      --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 4px 10px -1px rgba(0, 0, 0, 0.5);
+      --shadow-lg: 0 15px 25px -5px rgba(0, 0, 0, 0.6);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      line-height: 1.5;
+      transition: var(--transition);
+      padding: 2rem 1.5rem 5rem;
+    }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+
+    /* Header & Navigation */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 2rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: #fff;
+      font-weight: 800;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+    }
+
+    .brand-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-badge {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-pill);
+      background-color: var(--info-bg);
+      color: var(--info-text);
+      font-weight: 600;
+      margin-left: 0.5rem;
+      border: 1px solid var(--info-border);
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: var(--transition);
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--primary-text);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background-color: var(--bg-card);
+      color: var(--text-primary);
+      border-color: var(--border-color);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--bg-card-subtle);
+    }
+
+    .btn-danger {
+      background-color: var(--danger);
+      color: #ffffff;
+    }
+
+    .btn-sm {
+      padding: 0.35rem 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    /* Statistics Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.4rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-info h4 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      margin-bottom: 0.35rem;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .stat-icon.total { background-color: var(--info-bg); color: var(--info); border: 1px solid var(--info-border); }
+    .stat-icon.pending { background-color: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning-border); }
+    .stat-icon.progress { background-color: var(--primary); color: #fff; }
+    .stat-icon.completed { background-color: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+
+    /* Filter Toolbar */
+    .filter-bar {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      flex: 1;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.6rem 0.85rem 0.6rem 2.25rem;
+      background-color: var(--bg-card-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .select-dropdown {
+      padding: 0.6rem 2rem 0.6rem 0.85rem;
+      background-color: var(--bg-card-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      cursor: pointer;
+      outline: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 0.6rem center;
+      background-size: 1rem;
+    }
+
+    /* Tasks Table */
+    .table-container {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      margin-bottom: 2.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    thead {
+      background-color: var(--bg-card-subtle);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+      padding: 0.85rem 1.25rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+    }
+
+    td {
+      padding: 1.1rem 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+      font-size: 0.92rem;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: var(--bg-card-subtle);
+    }
+
+    .task-title-cell {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .task-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* Status Badges */
+    .badge-pending {
+      background-color: var(--warning-bg);
+      color: var(--warning-text);
+      border: 1px solid var(--warning-border);
+    }
+
+    .badge-progress {
+      background-color: var(--info-bg);
+      color: var(--info-text);
+      border: 1px solid var(--info-border);
+    }
+
+    .badge-completed {
+      background-color: var(--success-bg);
+      color: var(--success-text);
+      border: 1px solid var(--success-border);
+    }
+
+    /* Priority Badges */
+    .badge-priority-low {
+      background-color: var(--bg-card-subtle);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+    }
+
+    .badge-priority-med {
+      background-color: var(--warning-bg);
+      color: var(--warning-text);
+      border: 1px solid var(--warning-border);
+    }
+
+    .badge-priority-high {
+      background-color: var(--danger-bg);
+      color: var(--danger-text);
+      border: 1px solid var(--danger-border);
+    }
+
+    .actions-cell {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    /* Modal Reference Component */
+    .modal-preview-section {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px dashed var(--border-color);
+    }
+
+    .section-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-header h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .modal-container-mock {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      max-width: 540px;
+      padding: 1.75rem;
+      box-shadow: var(--shadow-lg);
+      margin: 0 auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .modal-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .form-group {
+      margin-bottom: 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .form-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-card-subtle);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* Alerts */
+    .alert-box {
+      padding: 0.85rem 1.2rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.9rem;
+    }
+
+    .alert-success {
+      background-color: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: var(--success-text);
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .filter-group {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="brand">
+        <div class="brand-logo">H</div>
+        <div>
+          <span class="brand-title">Hammoq Task Manager</span>
+          <span class="brand-badge">MERN Stack</span>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="btn btn-outline" id="themeToggleBtn" onclick="toggleTheme()">
+          <span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span>
+        </button>
+        <button class="btn btn-primary">
+          <span>+</span> Create Task
+        </button>
+      </div>
+    </header>
+
+    <!-- Flash Alert -->
+    <div class="alert-box alert-success">
+      <div>
+        <strong>Success:</strong> Connected to live MongoDB Atlas database <code>Hammoq</code>.
+      </div>
+      <span>&times;</span>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>Total Tasks</h4>
+          <div class="stat-number">4</div>
+        </div>
+        <div class="stat-icon total">📋</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>Pending</h4>
+          <div class="stat-number">1</div>
+        </div>
+        <div class="stat-icon pending">⏳</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>In Progress</h4>
+          <div class="stat-number">1</div>
+        </div>
+        <div class="stat-icon progress">⚡</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>Completed</h4>
+          <div class="stat-number">2</div>
+        </div>
+        <div class="stat-icon completed">✅</div>
+      </div>
+    </div>
+
+    <!-- Filter and Search Toolbar -->
+    <div class="filter-bar">
+      <div class="filter-group">
+        <div class="search-input-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="search-input" placeholder="Search tasks by title..." />
+        </div>
+        <select class="select-dropdown">
+          <option>All Statuses</option>
+          <option>Pending</option>
+          <option>In Progress</option>
+          <option>Completed</option>
+        </select>
+        <select class="select-dropdown">
+          <option>All Priorities</option>
+          <option>Low</option>
+          <option>Medium</option>
+          <option>High</option>
+        </select>
+        <select class="select-dropdown">
+          <option>Sort: Newest First</option>
+          <option>Sort: Oldest First</option>
+          <option>Sort: Due Date</option>
+        </select>
+      </div>
+      <button class="btn btn-outline btn-sm">Clear Filters</button>
+    </div>
+
+    <!-- Task Table -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Task Details</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Due Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="task-title-cell">Complete Assessment Submission</div>
+              <div class="task-desc">Verify dark/light theme, SOLID principles, and MongoDB synchronization.</div>
+            </td>
+            <td><span class="badge badge-progress">⚡ In Progress</span></td>
+            <td><span class="badge badge-priority-high">🔴 High</span></td>
+            <td>Nov 15, 2026</td>
+            <td>
+              <div class="actions-cell">
+                <button class="btn btn-outline btn-sm">Edit</button>
+                <button class="btn btn-outline btn-sm" style="color: var(--danger);">Delete</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="task-title-cell">Set up MongoDB Mongoose Model</div>
+              <div class="task-desc">Map Task schema explicitly to collection 'tasks' in 'Hammoq' database.</div>
+            </td>
+            <td><span class="badge badge-completed">✅ Completed</span></td>
+            <td><span class="badge badge-priority-high">🔴 High</span></td>
+            <td>Nov 13, 2026</td>
+            <td>
+              <div class="actions-cell">
+                <button class="btn btn-outline btn-sm">Edit</button>
+                <button class="btn btn-outline btn-sm" style="color: var(--danger);">Delete</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="task-title-cell">Implement Dark & Light Theme Tokens</div>
+              <div class="task-desc">Centralize CSS variables in index.css with data-theme support.</div>
+            </td>
+            <td><span class="badge badge-completed">✅ Completed</span></td>
+            <td><span class="badge badge-priority-med">🟡 Medium</span></td>
+            <td>Nov 13, 2026</td>
+            <td>
+              <div class="actions-cell">
+                <button class="btn btn-outline btn-sm">Edit</button>
+                <button class="btn btn-outline btn-sm" style="color: var(--danger);">Delete</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="task-title-cell">Add Unit and E2E API Verification Tests</div>
+              <div class="task-desc">Test all CRUD endpoints and edge case validation handling.</div>
+            </td>
+            <td><span class="badge badge-pending">⏳ Pending</span></td>
+            <td><span class="badge badge-priority-low">🟢 Low</span></td>
+            <td>Nov 18, 2026</td>
+            <td>
+              <div class="actions-cell">
+                <button class="btn btn-outline btn-sm">Edit</button>
+                <button class="btn btn-outline btn-sm" style="color: var(--danger);">Delete</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Modal Mockup Reference -->
+    <div class="modal-preview-section">
+      <div class="section-header">
+        <h3>Modal Dialog Visual Reference</h3>
+        <p>Demonstrates the design specification for Create Task and Edit Task modals.</p>
+      </div>
+
+      <div class="modal-container-mock">
+        <div class="modal-header">
+          <h4 class="modal-title">Create New Task</h4>
+          <button class="close-btn">&times;</button>
+        </div>
+        <form onsubmit="return false;">
+          <div class="form-group">
+            <label class="form-label">Task Title *</label>
+            <input type="text" class="form-control" placeholder="Enter task title" value="Integration Test Verification" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" rows="3" placeholder="Enter optional task details...">Perform end-to-end verification of REST endpoints and UI interactions.</textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Status</label>
+              <select class="form-control">
+                <option>Pending</option>
+                <option selected>In Progress</option>
+                <option>Completed</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Priority</label>
+              <select class="form-control">
+                <option>Low</option>
+                <option selected>Medium</option>
+                <option>High</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Due Date</label>
+            <input type="date" class="form-control" value="2026-11-20" />
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-outline">Cancel</button>
+            <button class="btn btn-primary">Save Task</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+
+      document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+      document.getElementById('themeLabel').textContent = next === 'dark' ? 'Light Mode' : 'Dark Mode';
+    }
+  </script>
+</body>
+</html>
