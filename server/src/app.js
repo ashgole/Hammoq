@@ -6,10 +6,13 @@ const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 
 const app = express();
 
-// Middleware: Enable CORS for frontend origin
+// Middleware: Enable CORS (supports local development and Vercel domains)
 app.use(
   cors({
-    origin: config.frontendUrl,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, or same-origin) or any Vercel/local origin
+      return callback(null, true);
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -22,8 +25,8 @@ app.use(express.json());
 // Routes
 app.use('/api', apiRoutes);
 
-// Health check endpoint
-app.get('/health', (req, res) => {
+// Health check endpoints
+app.get(['/health', '/api/health'], (req, res) => {
   res.status(200).json({
     success: true,
     message: 'Server is healthy',
