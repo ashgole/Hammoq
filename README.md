@@ -105,9 +105,26 @@ Hammoq/
 
 ---
 
-## 📌 3. Project Introduction
+## 📌 3. Project Introduction & Key Functionalities
 
-Built for the **Hammoq Infosystems** senior developer evaluation, this application demonstrates enterprise-grade full-stack fundamentals:
-- **Clean Code & SOLID Design:** Modular folder structure, single-purpose components, and clean separation between business logic and UI presentation.
-- **Zero-Dependency Styling:** Modern, responsive UI with zero heavy CSS framework bloat (bundle size is only ~164 kB).
-- **Production-Ready Verification:** Validated with end-to-end integration tests, graceful serverless connection handling on Vercel, and direct integration with live MongoDB Atlas.
+The **Hammoq Task Manager** is a full-stack web application designed to help users organize, track, and manage their daily work efficiently.
+
+### 🛠️ Tech Stack:
+- **Frontend:** React.js 18, Vite, JavaScript, CSS3 (Design Tokens)
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB Atlas, Mongoose ODM
+- **Deployment:** Vercel (Multi-Service Architecture)
+
+### What You Can Do (Core Features):
+- **Add Tasks:** Create new tasks with a title (required), description, status, priority, and due date.
+- **View Tasks:** Browse all tasks in a clean, responsive table on desktop or cards on mobile devices.
+- **Edit Tasks:** Update task details, edit descriptions, change priority, or adjust due dates via an intuitive modal dialog.
+- **Delete Tasks:** Delete tasks safely with a confirmation prompt to prevent accidental removal.
+- **Status Management:** Track progress using color-coded status pills (`Pending`, `In Progress`, `Completed`) and quickly advance status with a single click directly from the table.
+- **Search & Multi-Filter:**
+  - **Search:** Instant real-time search by task title.
+  - **Status Filter:** Filter by `Pending`, `In Progress`, or `Completed`.
+  - **Priority Filter:** Filter by `Low`, `Medium`, or `High`.
+  - **Sort:** Order tasks by creation date or due date (ascending or descending).
+- **Dashboard Statistics:** Live metric cards displaying real-time counts for Total, Pending, In Progress, and Completed tasks (clickable for instant filtering).
+- **Dark & Light Theme:** One-click toggle between Dark and Light modes with automatic system preference detection and saved user settings.
