@@ -1,45 +1,53 @@
 const mongoose = require('mongoose');
-const dns = require('dns');
 const config = require('./config');
 
-// Ensure DNS resolves MongoDB SRV records reliably across all network environments
-try {
-  dns.setServers(['8.8.8.8', '1.1.1.1']);
-} catch (dnsErr) {
-  console.warn('[MongoDB] Warning: Could not override DNS servers:', dnsErr.message);
+// In local development only (NOT on Vercel serverless), configure fallback DNS if needed.
+// On Vercel, dns.setServers overrides AWS Lambda internal DNS and causes SRV timeouts.
+if (!process.env.VERCEL && !process.env.AWS_REGION) {
+  try {
+    const dns = require('dns');
+    dns.setServers(['8.8.8.8', '1.1.1.1']);
+  } catch (dnsErr) {
+    // Ignore in environments where setting DNS is restricted
+  }
 }
 
+let connectionPromise = null;
+
 /**
- * Connect to MongoDB database
- * Single Responsibility: MongoDB connection lifecycle and event monitoring
+ * Connect to MongoDB database with serverless connection caching.
  */
 const connectDB = async () => {
-  if (!config.mongoUri) {
-    throw new Error('MONGODB_URI is not defined in environment variables');
+  // If already connected, reuse existing connection immediately
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection;
   }
 
-  // Setup Mongoose connection event listeners
-  mongoose.connection.on('connected', () => {
-    console.log(`[MongoDB] Connected successfully to database: ${config.dbName}`);
-  });
+  // If a connection is already in progress, await it
+  if (connectionPromise) {
+    return connectionPromise;
+  }
 
-  mongoose.connection.on('error', (err) => {
-    console.error(`[MongoDB] Connection error: ${err.message}`);
-  });
+  const mongoUri = process.env.MONGODB_URI || config.mongoUri;
+  if (!mongoUri) {
+    throw new Error('MONGODB_URI is not defined. Please add MONGODB_URI in Vercel Project Settings > Environment Variables.');
+  }
 
-  mongoose.connection.on('disconnected', () => {
-    console.log('[MongoDB] Connection disconnected');
-  });
+  const dbName = process.env.DB_NAME || config.dbName || 'Hammoq';
 
-  try {
-    const conn = await mongoose.connect(config.mongoUri, {
-      dbName: config.dbName,
-    });
+  connectionPromise = mongoose.connect(mongoUri, {
+    dbName: dbName,
+    serverSelectionTimeoutMS: 5000, // Fail fast after 5s instead of hanging
+  }).then((conn) => {
+    console.log(`[MongoDB] Connected successfully to database: ${conn.connection.name}`);
     return conn;
-  } catch (error) {
-    console.error(`[MongoDB] Initial connection failure: ${error.message}`);
-    throw error;
-  }
+  }).catch((err) => {
+    connectionPromise = null;
+    console.error(`[MongoDB] Connection error: ${err.message}`);
+    throw err;
+  });
+
+  return connectionPromise;
 };
 
 module.exports = connectDB;

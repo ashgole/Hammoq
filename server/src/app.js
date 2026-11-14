@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const config = require('./config/config');
+const connectDB = require('./config/db');
 const apiRoutes = require('./routes/api.routes');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 
@@ -22,10 +23,7 @@ app.use(
 // Middleware: Parse JSON request bodies
 app.use(express.json());
 
-// Routes
-app.use('/api', apiRoutes);
-
-// Health check endpoints
+// Health check endpoints (does not require DB connection)
 app.get(['/health', '/api/health'], (req, res) => {
   res.status(200).json({
     success: true,
@@ -33,6 +31,23 @@ app.get(['/health', '/api/health'], (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+// Middleware: Ensure MongoDB is connected before handling any API routes
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error('[MongoDB Middleware Error]:', err.message);
+    return res.status(500).json({
+      success: false,
+      message: `Database connection failed: ${err.message}`,
+    });
+  }
+});
+
+// Routes
+app.use('/api', apiRoutes);
 
 // 404 Not Found handler for undefined routes
 app.use(notFoundHandler);
