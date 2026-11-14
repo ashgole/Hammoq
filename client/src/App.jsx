@@ -20,7 +20,12 @@ const DEFAULT_FILTERS = {
 
 export function App() {
   const [tasks, setTasks] = useState([]);
-  const [backendStats, setBackendStats] = useState(null);
+  const [stats, setStats] = useState({
+    total: 0,
+    pending: 0,
+    inProgress: 0,
+    completed: 0,
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
@@ -50,15 +55,31 @@ export function App() {
     setError(null);
     try {
       const response = await getTasks(currentFilters);
-      // Support responses of format { success: true, data: [...], stats: {...} } or direct array
+      // Support responses of format { success: true, data: [...], statistics: {...} } or direct array
       const taskList = Array.isArray(response?.data)
         ? response.data
         : Array.isArray(response)
         ? response
         : [];
       setTasks(taskList);
-      if (response?.stats) {
-        setBackendStats(response.stats);
+
+      // Always read statistics directly from API response
+      if (response?.statistics) {
+        setStats(response.statistics);
+      } else if (response?.stats) {
+        setStats(response.stats);
+      } else {
+        // Fallback only if API response lacks statistics object
+        const total = taskList.length;
+        let pending = 0;
+        let inProgress = 0;
+        let completed = 0;
+        taskList.forEach((t) => {
+          if (t.status === 'Completed') completed++;
+          else if (t.status === 'In Progress') inProgress++;
+          else pending++;
+        });
+        setStats({ total, pending, inProgress, completed });
       }
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Unable to connect to the backend server.';
@@ -73,25 +94,6 @@ export function App() {
   useEffect(() => {
     fetchTasksList(filters);
   }, [filters, fetchTasksList]);
-
-  // Derived or fallback statistics
-  const stats = useMemo(() => {
-    if (backendStats) {
-      return backendStats;
-    }
-    const total = tasks.length;
-    let pending = 0;
-    let inProgress = 0;
-    let completed = 0;
-
-    tasks.forEach((t) => {
-      if (t.status === 'Completed') completed++;
-      else if (t.status === 'In Progress') inProgress++;
-      else pending++;
-    });
-
-    return { total, pending, inProgress, completed };
-  }, [backendStats, tasks]);
 
   // Filter change handlers
   const handleFilterChange = (updates) => {
